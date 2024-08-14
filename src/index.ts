@@ -1,7 +1,7 @@
 /** @format */
 
 import express from "express";
-import puppeteer, { Browser } from "puppeteer";
+import puppeteer, { Browser, Page } from "puppeteer";
 
 const IS_PRODUCTION = true; // process.env.NODE_ENV === "production";
 const browserWSEndpoint = "http://192.168.8.100:3222?token=6R0W53R135510";
@@ -11,6 +11,21 @@ const app = express();
 
 const getBrowser = async (): Promise<Browser> =>
   IS_PRODUCTION ? puppeteer.connect({ browserWSEndpoint }) : puppeteer.launch();
+
+async function isLoggedIn(page: Page): Promise<boolean> {
+  try {
+    await page.waitForSelector(
+      `a#logoutlink.margin-right-10[data-trans="logout"][data-bind*="logout"]`,
+      {
+        visible: true,
+        timeout: 5000,
+      }
+    );
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 app.get("/restart_dialog", async (req, res) => {
   let browser: Browser | null = null;
@@ -24,17 +39,18 @@ app.get("/restart_dialog", async (req, res) => {
     });
     await page.goto(dialog_router, { waitUntil: "networkidle2" });
 
-    const isLoggedIn = (await page.$("a#logoutlink")) !== null;
+    const loggedIn = await isLoggedIn(page);
 
-    console.log(isLoggedIn);
-
-    if (!isLoggedIn) {
+    if (!loggedIn) {
       await page.waitForSelector("a#loginlink", { visible: true });
       await page.click("a#loginlink");
       await page.type("#txtUsr", "user");
       await page.type("#txtPwd", "Tj92N5D9");
       await page.click("#btnLogin");
-      await page.waitForSelector("a#logoutlink", { visible: true });
+      await page.waitForSelector(
+        `a#logoutlink.margin-right-10[data-trans="logout"][data-bind*="logout"]`,
+        { visible: true }
+      );
     }
 
     await page.waitForSelector(
@@ -73,17 +89,18 @@ app.get("/restart_hutch", async (req, res) => {
     });
     await page.goto(hutch_router, { waitUntil: "networkidle2" });
 
-    const isLoggedIn = (await page.$("a#logoutlink")) !== null;
+    const loggedIn = await isLoggedIn(page);
 
-    console.log(isLoggedIn);
-
-    if (!isLoggedIn) {
+    if (!loggedIn) {
       await page.waitForSelector("a#loginlink", { visible: true });
       await page.click("a#loginlink");
       await page.type("#txtUsr", "admin");
       await page.type("#txtPwd", "admin");
       await page.click("#btnLogin");
-      await page.waitForSelector("a#logoutlink", { visible: true });
+      await page.waitForSelector(
+        `a#logoutlink.margin-right-10[data-trans="logout"][data-bind*="logout"]`,
+        { visible: true }
+      );
     }
 
     await page.waitForSelector(
