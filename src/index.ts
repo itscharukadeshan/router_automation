@@ -78,7 +78,7 @@ app.get("/restart_dialog", async (req, res) => {
     );
 
     await page.waitForSelector("#yesbtn", { visible: true });
-    // await page.click("#yesbtn");
+    await page.click("#yesbtn");
 
     const screenshot = await page.screenshot();
     res.end(screenshot, "binary");
