@@ -34,7 +34,7 @@ async function isLoggedIn(page: Page): Promise<boolean> {
       `a#logoutlink.margin-right-10[data-trans="logout"][data-bind*="logout"]`,
       {
         visible: true,
-        timeout: 5000,
+        timeout: 10000,
       }
     );
     return true;
