@@ -43,7 +43,7 @@ async function isLoggedIn(page: Page): Promise<boolean> {
   }
 }
 
-app.get("/restart_dialog", async (req, res) => {
+app.get("api/restart_dialog", async (req, res) => {
   let browser: Browser | null = null;
 
   try {
@@ -95,7 +95,7 @@ app.get("/restart_dialog", async (req, res) => {
   }
 });
 
-app.get("/restart_hutch", async (req, res) => {
+app.get("api/restart_hutch", async (req, res) => {
   let browser: Browser | null = null;
 
   try {
@@ -144,7 +144,7 @@ app.get("/restart_hutch", async (req, res) => {
   }
 });
 
-app.get("/dns2_dialog_enable", async (req, res) => {
+app.get("api/dns2_dialog_enable", async (req, res) => {
   let browser: Browser | null = null;
 
   try {
@@ -208,7 +208,7 @@ app.get("/dns2_dialog_enable", async (req, res) => {
   }
 });
 
-app.get("/dns2_dialog_disable", async (req, res) => {
+app.get("api/dns2_dialog_disable", async (req, res) => {
   let browser: Browser | null = null;
 
   try {
