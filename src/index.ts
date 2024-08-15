@@ -130,8 +130,7 @@ app.get("/restart_hutch", async (req, res) => {
     await page.waitForSelector("#yesbtn", { visible: true });
     await page.click("#yesbtn");
 
-    const screenshot = await page.screenshot();
-    res.end(screenshot, "binary");
+    res.end("Restating hutch router ...");
   } catch (error: any) {
     if (!res.headersSent) {
       res.status(400).send(error.message);
@@ -192,8 +191,10 @@ app.get("/dns2_dialog_enable", async (req, res) => {
 
     await page.click("input#yesbtn");
 
-    const screenshot = await page.screenshot();
-    res.end(screenshot, "binary");
+    res.end("Restating dialog router ...");
+
+    // const screenshot = await page.screenshot();
+    // res.end(screenshot, "binary");
   } catch (error: any) {
     if (!res.headersSent) {
       res.status(400).send(error.message);
