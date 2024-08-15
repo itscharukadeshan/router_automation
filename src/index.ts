@@ -13,6 +13,7 @@ import {
 } from "./config";
 import axios from "axios";
 import qs from "qs";
+import cors from "cors";
 
 const IS_PRODUCTION = process.env.NODE_ENV === "production";
 const browserWSEndpoint = BROWSER_ENDPOINT;
@@ -26,6 +27,8 @@ const hutch_usr = HUTCH_ROUTER_USER_NAME;
 const hutch_password = HUTCH_ROUTER_PASSWORD;
 
 const app = express();
+
+app.use(cors());
 
 const getBrowser = async (): Promise<Browser> =>
   IS_PRODUCTION
@@ -46,6 +49,9 @@ async function isLoggedIn(page: Page): Promise<boolean> {
     return false;
   }
 }
+
+const delay = (ms: number | undefined) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
 
 app.get("/api/restart_dialog", async (req, res) => {
   let browser: Browser | null = null;
@@ -99,6 +105,31 @@ app.get("/api/restart_dialog", async (req, res) => {
   }
 });
 
+app.post("/api/legacy/restart_dialog", async (req, res) => {
+  const data = `isTest=false&goformId=REBOOT_DEVICE`;
+  const url = "http://192.168.8.1/goform/goform_set_cmd_process";
+
+  try {
+    await axios.post(url, data, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    });
+
+    await delay(10);
+
+    await axios.post(url, data, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    });
+
+    res.status(200).json({ message: "Dialog router rebooted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to reboot Dialog router" });
+  }
+});
+
 app.get("/api/restart_hutch", async (req, res) => {
   let browser: Browser | null = null;
 
@@ -145,6 +176,32 @@ app.get("/api/restart_hutch", async (req, res) => {
     if (browser) {
       await browser.close();
     }
+  }
+});
+
+app.post("/api/legacy/restart_hutch", async (req, res) => {
+  const data = `isTest=false&goformId=REBOOT_DEVICE`;
+  const url = "http://192.168.8.2/goform/goform_set_cmd_process";
+
+  try {
+    await axios.post(url, data, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+      },
+    });
+
+    await delay(10);
+
+    await axios.post(url, data, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    });
+
+    res.status(200).json({ message: "Hutch router rebooted successfully" });
+  } catch (error) {
+    console.error("Error rebooting Router 1:", error);
+    res.status(500).json({ error: "Failed to reboot hutch router" });
   }
 });
 
