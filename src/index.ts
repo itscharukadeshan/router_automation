@@ -10,8 +10,10 @@ import {
   HUTCH_ROUTER_PASSWORD,
   HUTCH_ROUTER_USER_NAME,
   BROWSER_ENDPOINT,
+  BROWSER_TOKEN,
+  BROWSER_LESS_ENDPOINT,
 } from "./config";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import qs from "qs";
 import cors from "cors";
 
@@ -354,7 +356,7 @@ app.get("/api/dns2_dialog_disable", async (req, res) => {
   }
 });
 
-app.use("/status/dialog", async (req, res) => {
+app.use("/api/status/dialog", async (req, res) => {
   try {
     const status = await axios.post(
       "http://192.168.8.1/goform/goform_get_cmd_process",
@@ -389,7 +391,7 @@ app.use("/status/dialog", async (req, res) => {
   }
 });
 
-app.use("/status/hutch", async (req, res) => {
+app.use("/api/status/hutch", async (req, res) => {
   try {
     const status = await axios.post(
       "http://192.168.8.2/goform/goform_get_cmd_process",
@@ -426,6 +428,23 @@ app.use("/status/hutch", async (req, res) => {
     res.json({ signal_data, status_data });
   } catch (error) {
     res.status(500).json({ error: "Request failed" });
+  }
+});
+
+app.get("/api/status/browserless", async (req, res) => {
+  const url = `${BROWSER_LESS_ENDPOINT}/config${BROWSER_TOKEN}`;
+
+  try {
+    const config = await axios.get(url);
+
+    res
+      .status(200)
+      .json({ message: `Browserless is working : ${config.status}` });
+  } catch (error: any) {
+    if (error) {
+      console.error("Unable to reach browserless:", error);
+      res.status(500).json({ error: "Unable to reach browserless" });
+    }
   }
 });
 
