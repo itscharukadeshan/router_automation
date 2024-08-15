@@ -80,8 +80,10 @@ app.get("/restart_dialog", async (req, res) => {
     await page.waitForSelector("#yesbtn", { visible: true });
     await page.click("#yesbtn");
 
-    const screenshot = await page.screenshot();
-    res.end(screenshot, "binary");
+    res.end("Restating dialog router ...");
+
+    // const screenshot = await page.screenshot();
+    // res.end(screenshot, "binary");
   } catch (error: any) {
     if (!res.headersSent) {
       res.status(400).send(error.message);
@@ -191,7 +193,7 @@ app.get("/dns2_dialog_enable", async (req, res) => {
 
     await page.click("input#yesbtn");
 
-    res.end("Restating dialog router ...");
+    res.end("Enabling dns_2 need to restart dialog router ...");
 
     // const screenshot = await page.screenshot();
     // res.end(screenshot, "binary");
@@ -255,8 +257,10 @@ app.get("/dns2_dialog_disable", async (req, res) => {
 
     await page.click("input#yesbtn");
 
-    const screenshot = await page.screenshot();
-    res.end(screenshot, "binary");
+    res.end("Disabling dns_2 need to restart dialog router ...");
+
+    // const screenshot = await page.screenshot();
+    // res.end(screenshot, "binary");
   } catch (error: any) {
     if (!res.headersSent) {
       res.status(400).send(error.message);
