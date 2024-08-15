@@ -11,6 +11,8 @@ import {
   HUTCH_ROUTER_USER_NAME,
   BROWSER_ENDPOINT,
 } from "./config";
+import axios from "axios";
+import qs from "qs";
 
 const IS_PRODUCTION = true; // process.env.NODE_ENV === "production";
 const browserWSEndpoint = BROWSER_ENDPOINT;
@@ -269,6 +271,81 @@ app.get("/api/dns2_dialog_disable", async (req, res) => {
     if (browser) {
       await browser.close();
     }
+  }
+});
+
+app.use("/status/dialog", async (req, res) => {
+  try {
+    const status = await axios.post(
+      "http://192.168.8.1/goform/goform_get_cmd_process",
+      "isTest=false&cmd=system_status",
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Cookie: "pageForward=home",
+        },
+      }
+    );
+    const signal = await axios.get(
+      "http://192.168.8.1/goform/goform_get_cmd_process",
+      {
+        params: {
+          multi_data: 1,
+          isTest: false,
+          cmd: "web_signal",
+        },
+        headers: {
+          Cookie: "pageForward=home",
+        },
+      }
+    );
+
+    const status_data = status.data;
+    const signal_data = signal.data;
+
+    res.json({ status_data, signal_data });
+  } catch (error) {
+    res.status(500).json({ error: "Request failed" });
+  }
+});
+
+app.use("/status/hutch", async (req, res) => {
+  try {
+    const status = await axios.post(
+      "http://192.168.8.2/goform/goform_get_cmd_process",
+      "isTest=false&cmd=system_status",
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Origin: "http://192.168.8.2",
+          Referer: "http://192.168.8.2/index.html",
+          Cookie: "pageForward=home",
+        },
+      }
+    );
+    const signal = await axios.post(
+      "http://192.168.8.2/goform/goform_get_cmd_process",
+      qs.stringify({
+        multi_data: 1,
+        isTest: false,
+        cmd: "web_signal",
+      }),
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Origin: "http://192.168.8.2",
+          Referer: "http://192.168.8.2/index.html",
+          Cookie: "pageForward=home",
+        },
+      }
+    );
+
+    const signal_data = signal.data;
+    const status_data = status.data;
+
+    res.json({ signal_data, status_data });
+  } catch (error) {
+    res.status(500).json({ error: "Request failed" });
   }
 });
 
