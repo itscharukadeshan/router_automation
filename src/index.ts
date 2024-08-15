@@ -11,7 +11,7 @@ import {
   HUTCH_ROUTER_USER_NAME,
   BROWSER_ENDPOINT,
 } from "./config";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import qs from "qs";
 import cors from "cors";
 
@@ -105,7 +105,7 @@ app.get("/api/restart_dialog", async (req, res) => {
   }
 });
 
-app.post("/api/legacy/restart_dialog", async (req, res) => {
+app.get("/api/legacy/restart_dialog", async (req, res) => {
   const data = `isTest=false&goformId=REBOOT_DEVICE`;
   const url = "http://192.168.8.1/goform/goform_set_cmd_process";
 
@@ -125,8 +125,19 @@ app.post("/api/legacy/restart_dialog", async (req, res) => {
     });
 
     res.status(200).json({ message: "Dialog router rebooted successfully" });
-  } catch (error) {
-    res.status(500).json({ error: "Failed to reboot Dialog router" });
+  } catch (error: any) {
+    if (error.code === "ECONNRESET") {
+      console.warn(
+        "Dialog router reboot likely successful despite socket hang up"
+      );
+      res.status(200).json({
+        message:
+          "Dialog router reboot may have completed despite socket hang up",
+      });
+    } else {
+      console.error("Error rebooting dialog router:", error);
+      res.status(500).json({ error: "Failed to reboot dialog router" });
+    }
   }
 });
 
@@ -179,7 +190,7 @@ app.get("/api/restart_hutch", async (req, res) => {
   }
 });
 
-app.post("/api/legacy/restart_hutch", async (req, res) => {
+app.get("/api/legacy/restart_hutch", async (req, res) => {
   const data = `isTest=false&goformId=REBOOT_DEVICE`;
   const url = "http://192.168.8.2/goform/goform_set_cmd_process";
 
@@ -199,9 +210,19 @@ app.post("/api/legacy/restart_hutch", async (req, res) => {
     });
 
     res.status(200).json({ message: "Hutch router rebooted successfully" });
-  } catch (error) {
-    console.error("Error rebooting Router 1:", error);
-    res.status(500).json({ error: "Failed to reboot hutch router" });
+  } catch (error: any) {
+    if (error.code === "ECONNRESET") {
+      console.warn(
+        "Hutch router reboot likely successful despite socket hang up"
+      );
+      res.status(200).json({
+        message:
+          "Hutch router reboot may have completed despite socket hang up",
+      });
+    } else {
+      console.error("Error rebooting hutch router:", error);
+      res.status(500).json({ error: "Failed to reboot hutch router" });
+    }
   }
 });
 
