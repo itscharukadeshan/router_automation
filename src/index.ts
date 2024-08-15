@@ -14,7 +14,7 @@ import {
 import axios from "axios";
 import qs from "qs";
 
-const IS_PRODUCTION = true; // process.env.NODE_ENV === "production";
+const IS_PRODUCTION = process.env.NODE_ENV === "production";
 const browserWSEndpoint = BROWSER_ENDPOINT;
 const dialog_router = DIALOG_ROUTER;
 const hutch_router = HUTCH_ROUTER;
@@ -28,7 +28,9 @@ const hutch_password = HUTCH_ROUTER_PASSWORD;
 const app = express();
 
 const getBrowser = async (): Promise<Browser> =>
-  IS_PRODUCTION ? puppeteer.connect({ browserWSEndpoint }) : puppeteer.launch();
+  IS_PRODUCTION
+    ? puppeteer.connect({ browserWSEndpoint })
+    : puppeteer.connect({ browserWSEndpoint });
 
 async function isLoggedIn(page: Page): Promise<boolean> {
   try {
