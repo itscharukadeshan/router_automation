@@ -78,6 +78,9 @@ app.get("/api/restart_dialog", async (req, res) => {
       await page.type("#txtUsr", dialog_usr);
       await page.type("#txtPwd", dialog_password);
       await page.click("#btnLogin");
+
+      await delay(3000);
+
       await page.waitForSelector(
         `a#logoutlink.margin-right-10[data-trans="logout"][data-bind*="logout"]`,
         { visible: true }
@@ -166,6 +169,9 @@ app.get("/api/restart_hutch", async (req, res) => {
       await page.type("#txtUsr", hutch_usr);
       await page.type("#txtPwd", hutch_password);
       await page.click("#btnLogin");
+
+      await delay(3000);
+
       await page.waitForSelector(
         `a#logoutlink.margin-right-10[data-trans="logout"][data-bind*="logout"]`,
         { visible: true }
@@ -251,6 +257,9 @@ app.get("/api/dns2_dialog_enable", async (req, res) => {
       await page.type("#txtUsr", dialog_usr);
       await page.type("#txtPwd", dialog_password);
       await page.click("#btnLogin");
+
+      await delay(3000);
+
       await page.waitForSelector(
         `a#logoutlink.margin-right-10[data-trans="logout"][data-bind*="logout"]`,
         { visible: true }
@@ -315,6 +324,9 @@ app.get("/api/dns2_dialog_disable", async (req, res) => {
       await page.type("#txtUsr", dialog_usr);
       await page.type("#txtPwd", dialog_password);
       await page.click("#btnLogin");
+
+      await delay(3000);
+
       await page.waitForSelector(
         `a#logoutlink.margin-right-10[data-trans="logout"][data-bind*="logout"]`,
         { visible: true }
