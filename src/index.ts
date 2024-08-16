@@ -118,7 +118,7 @@ app.get("/api/legacy/restart_dialog", async (req, res) => {
       },
     });
 
-    await delay(10);
+    await delay(1);
 
     await axios.post(url, data, {
       headers: {
@@ -203,7 +203,7 @@ app.get("/api/legacy/restart_hutch", async (req, res) => {
       },
     });
 
-    await delay(10);
+    await delay(1);
 
     await axios.post(url, data, {
       headers: {
