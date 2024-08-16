@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "npx nodemon ./src/index.ts",
+    "dev": "npx nodemon ./src/index.ts",
     "build": "tsc",
-    "start:prod": "node ./dist/index.js"
+    "start": "node ./build/index.js"
   },
   "keywords": [],
   "author": "",

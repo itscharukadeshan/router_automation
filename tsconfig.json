@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
-    "sourceMap": true,
-    "outDir": "src/dist",
+    "outDir": "./build",
+    "module": "commonjs",
+    "target": "es2017",
     "strict": true,
-    "lib": ["esnext", "dom"],
     "esModuleInterop": true,
-    "types": ["node"],
-    "resolveJsonModule": true
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/**/.ts"]
+  "include": ["src/**/*"]
 }
