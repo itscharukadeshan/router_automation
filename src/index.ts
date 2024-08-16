@@ -385,7 +385,12 @@ app.use("/api/status/dialog", async (req, res) => {
     const status_data = status.data;
     const signal_data = signal.data;
 
-    res.json({ status_data, signal_data });
+    const unifiedData = {
+      ...status_data,
+      ...signal_data,
+    };
+
+    res.json(unifiedData);
   } catch (error) {
     res.status(500).json({ error: "Request failed" });
   }
@@ -425,7 +430,12 @@ app.use("/api/status/hutch", async (req, res) => {
     const signal_data = signal.data;
     const status_data = status.data;
 
-    res.json({ signal_data, status_data });
+    const unifiedData = {
+      ...status_data,
+      ...signal_data,
+    };
+
+    res.json(unifiedData);
   } catch (error) {
     res.status(500).json({ error: "Request failed" });
   }
