@@ -16,6 +16,7 @@ import {
 import axios from "axios";
 import qs from "qs";
 import cors from "cors";
+const path = require("path");
 
 const IS_PRODUCTION = process.env.NODE_ENV === "production";
 const browserWSEndpoint = BROWSER_ENDPOINT;
@@ -31,6 +32,8 @@ const hutch_password = HUTCH_ROUTER_PASSWORD;
 const app = express();
 
 app.use(cors());
+
+app.use(express.static(path.join(__dirname, "./dist")));
 
 const getBrowser = async (): Promise<Browser> =>
   IS_PRODUCTION
@@ -456,6 +459,10 @@ app.get("/api/status/browserless", async (req, res) => {
       res.status(500).json({ error: "Unable to reach browserless" });
     }
   }
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
 
 app.listen(3223, () => console.log("Listening on PORT: http://localhost:3223"));
