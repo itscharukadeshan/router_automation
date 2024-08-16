@@ -388,9 +388,18 @@ app.use("/api/status/dialog", async (req, res) => {
     const status_data = status.data;
     const signal_data = signal.data;
 
+    const uplink_rate = parseInt(status_data.uplink_rate, 10);
+    const downlink_rate = parseInt(status_data.downlink_rate, 10);
+    const uplink_traffic = parseInt(status_data.uplink_traffic, 10);
+    const downlink_traffic = parseInt(status_data.downlink_traffic, 10);
+
     const unifiedData = {
       ...status_data,
       ...signal_data,
+      uplink_rate,
+      downlink_rate,
+      uplink_traffic,
+      downlink_traffic,
     };
 
     res.json(unifiedData);
@@ -433,9 +442,18 @@ app.use("/api/status/hutch", async (req, res) => {
     const signal_data = signal.data;
     const status_data = status.data;
 
+    const uplink_rate = parseInt(status_data.uplink_rate, 10);
+    const downlink_rate = parseInt(status_data.downlink_rate, 10);
+    const uplink_traffic = parseInt(status_data.uplink_traffic, 10);
+    const downlink_traffic = parseInt(status_data.downlink_traffic, 10);
+
     const unifiedData = {
       ...status_data,
       ...signal_data,
+      uplink_rate,
+      downlink_rate,
+      uplink_traffic,
+      downlink_traffic,
     };
 
     res.json(unifiedData);
