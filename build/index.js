@@ -77,6 +77,80 @@ app.get("/api/restart_dialog", async (req, res) => {
         }
     }
 });
+app.get("/api/dialog/switch_network", async (req, res) => {
+    let browser = null;
+    try {
+        browser = await getBrowser();
+        const page = await browser.newPage();
+        await page.setViewport({
+            width: 1280,
+            height: 800,
+        });
+        await page.goto(dialog_router, { waitUntil: "networkidle2" });
+        const loggedIn = await isLoggedIn(page);
+        if (!loggedIn) {
+            await page.waitForSelector("a#loginlink", { visible: true });
+            await page.click("a#loginlink");
+            await page.type("#txtUsr", dialog_usr);
+            await page.type("#txtPwd", dialog_password);
+            await page.click("#btnLogin");
+            await delay(3000);
+            await page.waitForSelector(`a#logoutlink.margin-right-10[data-trans="logout"][data-bind*="logout"]`, { visible: true });
+        }
+        await page.waitForSelector("#h_connect_btn");
+        await page.click("#h_connect_btn");
+        res.end("Restating dialog router ...");
+        // const screenshot = await page.screenshot();
+        // res.end(screenshot, "binary");
+    }
+    catch (error) {
+        if (!res.headersSent) {
+            res.status(400).send(error.message);
+        }
+    }
+    finally {
+        if (browser) {
+            await browser.close();
+        }
+    }
+});
+app.get("/api/hutch/switch_network", async (req, res) => {
+    let browser = null;
+    try {
+        browser = await getBrowser();
+        const page = await browser.newPage();
+        await page.setViewport({
+            width: 1280,
+            height: 800,
+        });
+        await page.goto(hutch_router, { waitUntil: "networkidle2" });
+        const loggedIn = await isLoggedIn(page);
+        if (!loggedIn) {
+            await page.waitForSelector("a#loginlink", { visible: true });
+            await page.click("a#loginlink");
+            await page.type("#txtUsr", hutch_usr);
+            await page.type("#txtPwd", hutch_password);
+            await page.click("#btnLogin");
+            await delay(3000);
+            await page.waitForSelector(`a#logoutlink.margin-right-10[data-trans="logout"][data-bind*="logout"]`, { visible: true });
+        }
+        await page.waitForSelector("#h_connect_btn");
+        await page.click("#h_connect_btn");
+        res.end("Restating hutch router ...");
+        // const screenshot = await page.screenshot();
+        // res.end(screenshot, "binary");
+    }
+    catch (error) {
+        if (!res.headersSent) {
+            res.status(400).send(error.message);
+        }
+    }
+    finally {
+        if (browser) {
+            await browser.close();
+        }
+    }
+});
 app.get("/api/legacy/restart_dialog", async (req, res) => {
     const data = `isTest=false&goformId=REBOOT_DEVICE`;
     const url = "http://192.168.8.1/goform/goform_set_cmd_process";
@@ -282,7 +356,7 @@ app.use("/api/status/dialog", async (req, res) => {
             params: {
                 multi_data: 1,
                 isTest: false,
-                cmd: "web_signal",
+                cmd: "web_signal,ppp_status",
             },
             headers: {
                 Cookie: "pageForward=home",
@@ -317,7 +391,9 @@ app.use("/api/status/hutch", async (req, res) => {
         const signal = await axios_1.default.post("http://192.168.8.2/goform/goform_get_cmd_process", qs_1.default.stringify({
             multi_data: 1,
             isTest: false,
-            cmd: "web_signal",
+            sms_received_flag: 0,
+            sts_received_flag: 0,
+            cmd: "web_signal,ppp_status",
         }), {
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
