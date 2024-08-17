@@ -7,7 +7,7 @@ cd /home/charuka/Web_dev/router_utils_api
 pkill -f "node build/index.js"
 
 # Start the app using Node.js
-node build/index.js &
+node build/index.js > app.log 2>&1 &
 
 # Get the PID of the newly started process
 APP_PID=$!
