@@ -113,7 +113,7 @@ app.get("/api/restart_dialog", async (req, res) => {
   }
 });
 
-app.get("/api/dialog/switch_network", async (req, res) => {
+app.get("/api/switch_network/dialog", async (req, res) => {
   let browser: Browser | null = null;
 
   try {
@@ -145,7 +145,7 @@ app.get("/api/dialog/switch_network", async (req, res) => {
 
     await page.click("#h_connect_btn");
 
-    res.end("Restating dialog router ...");
+    res.end("Switching internet connection ...");
 
     // const screenshot = await page.screenshot();
     // res.end(screenshot, "binary");
@@ -160,7 +160,7 @@ app.get("/api/dialog/switch_network", async (req, res) => {
   }
 });
 
-app.get("/api/hutch/switch_network", async (req, res) => {
+app.get("/api/switch_network/hutch", async (req, res) => {
   let browser: Browser | null = null;
 
   try {
@@ -192,7 +192,7 @@ app.get("/api/hutch/switch_network", async (req, res) => {
 
     await page.click("#h_connect_btn");
 
-    res.end("Restating hutch router ...");
+    res.end("Switching internet connection");
 
     // const screenshot = await page.screenshot();
     // res.end(screenshot, "binary");
