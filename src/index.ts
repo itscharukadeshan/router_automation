@@ -33,7 +33,7 @@ const app = express();
 
 app.use(cors());
 
-app.use(express.static(path.join(__dirname, "./dist")));
+// app.use(express.static(path.join(__dirname, "./dist")));
 
 const getBrowser = async (): Promise<Browser> =>
   IS_PRODUCTION
@@ -102,6 +102,61 @@ app.get("/api/restart_dialog", async (req, res) => {
 
     // const screenshot = await page.screenshot();
     // res.end(screenshot, "binary");
+  } catch (error: any) {
+    if (!res.headersSent) {
+      res.status(400).send(error.message);
+    }
+  } finally {
+    if (browser) {
+      await browser.close();
+    }
+  }
+});
+
+app.get("/api/switch_network", async (req, res) => {
+  let browser: Browser | null = null;
+
+  try {
+    browser = await getBrowser();
+    const page = await browser.newPage();
+    await page.setViewport({
+      width: 1280,
+      height: 800,
+    });
+    await page.goto(dialog_router, { waitUntil: "networkidle2" });
+
+    const loggedIn = await isLoggedIn(page);
+
+    if (!loggedIn) {
+      await page.waitForSelector("a#loginlink", { visible: true });
+      await page.click("a#loginlink");
+      await page.type("#txtUsr", dialog_usr);
+      await page.type("#txtPwd", dialog_password);
+      await page.click("#btnLogin");
+
+      await delay(3000);
+
+      await page.waitForSelector(
+        `a#logoutlink.margin-right-10[data-trans="logout"][data-bind*="logout"]`,
+        { visible: true }
+      );
+    }
+
+    // await page.waitForSelector(
+    //   'input.btn.btn-primary[data-trans="restart_button"][value="Restart Device"]',
+    //   { visible: true }
+    // );
+    // await page.click(
+    //   'input.btn.btn-primary[data-trans="restart_button"][value="Restart Device"]'
+    // );
+
+    // await page.waitForSelector("#yesbtn", { visible: true });
+    // await page.click("#yesbtn");
+
+    // res.end("Restating dialog router ...");
+
+    const screenshot = await page.screenshot();
+    res.end(screenshot, "binary");
   } catch (error: any) {
     if (!res.headersSent) {
       res.status(400).send(error.message);
@@ -389,7 +444,7 @@ app.use("/api/status/dialog", async (req, res) => {
         params: {
           multi_data: 1,
           isTest: false,
-          cmd: "web_signal",
+          cmd: "web_signal,ppp_status",
         },
         headers: {
           Cookie: "pageForward=home",
@@ -439,7 +494,9 @@ app.use("/api/status/hutch", async (req, res) => {
       qs.stringify({
         multi_data: 1,
         isTest: false,
-        cmd: "web_signal",
+        sms_received_flag: 0,
+        sts_received_flag: 0,
+        cmd: "web_signal,ppp_status",
       }),
       {
         headers: {
@@ -491,8 +548,8 @@ app.get("/api/status/browserless", async (req, res) => {
   }
 });
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "dist", "index.html"));
-});
+// app.get("/", (req, res) => {
+//   res.sendFile(path.join(__dirname, "dist", "index.html"));
+// });
 
 app.listen(3223, () => console.log("Listening on PORT: http://localhost:3223"));
