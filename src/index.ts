@@ -465,7 +465,7 @@ app.get("/api/dns2_dialog_disable", async (req, res) => {
   }
 });
 
-app.use("/api/status/dialog", async (req, res) => {
+app.get("/api/status/dialog", async (req, res) => {
   try {
     const status = await axios.post(
       "http://192.168.8.1/goform/goform_get_cmd_process",
@@ -514,7 +514,7 @@ app.use("/api/status/dialog", async (req, res) => {
   }
 });
 
-app.use("/api/status/hutch", async (req, res) => {
+app.get("/api/status/hutch", async (req, res) => {
   try {
     const status = await axios.post(
       "http://192.168.8.2/goform/goform_get_cmd_process",
