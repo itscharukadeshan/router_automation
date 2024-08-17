@@ -33,7 +33,7 @@ const app = express();
 
 app.use(cors());
 
-// app.use(express.static(path.join(__dirname, "./dist")));
+app.use(express.static(path.join(__dirname, "./dist")));
 
 const getBrowser = async (): Promise<Browser> =>
   IS_PRODUCTION
@@ -113,7 +113,7 @@ app.get("/api/restart_dialog", async (req, res) => {
   }
 });
 
-app.get("/api/switch_network", async (req, res) => {
+app.get("/api/dialog/switch_network", async (req, res) => {
   let browser: Browser | null = null;
 
   try {
@@ -141,22 +141,61 @@ app.get("/api/switch_network", async (req, res) => {
         { visible: true }
       );
     }
+    await page.waitForSelector("#h_connect_btn");
 
-    // await page.waitForSelector(
-    //   'input.btn.btn-primary[data-trans="restart_button"][value="Restart Device"]',
-    //   { visible: true }
-    // );
-    // await page.click(
-    //   'input.btn.btn-primary[data-trans="restart_button"][value="Restart Device"]'
-    // );
+    await page.click("#h_connect_btn");
 
-    // await page.waitForSelector("#yesbtn", { visible: true });
-    // await page.click("#yesbtn");
+    res.end("Restating dialog router ...");
 
-    // res.end("Restating dialog router ...");
+    // const screenshot = await page.screenshot();
+    // res.end(screenshot, "binary");
+  } catch (error: any) {
+    if (!res.headersSent) {
+      res.status(400).send(error.message);
+    }
+  } finally {
+    if (browser) {
+      await browser.close();
+    }
+  }
+});
 
-    const screenshot = await page.screenshot();
-    res.end(screenshot, "binary");
+app.get("/api/hutch/switch_network", async (req, res) => {
+  let browser: Browser | null = null;
+
+  try {
+    browser = await getBrowser();
+    const page = await browser.newPage();
+    await page.setViewport({
+      width: 1280,
+      height: 800,
+    });
+    await page.goto(hutch_router, { waitUntil: "networkidle2" });
+
+    const loggedIn = await isLoggedIn(page);
+
+    if (!loggedIn) {
+      await page.waitForSelector("a#loginlink", { visible: true });
+      await page.click("a#loginlink");
+      await page.type("#txtUsr", hutch_usr);
+      await page.type("#txtPwd", hutch_password);
+      await page.click("#btnLogin");
+
+      await delay(3000);
+
+      await page.waitForSelector(
+        `a#logoutlink.margin-right-10[data-trans="logout"][data-bind*="logout"]`,
+        { visible: true }
+      );
+    }
+    await page.waitForSelector("#h_connect_btn");
+
+    await page.click("#h_connect_btn");
+
+    res.end("Restating hutch router ...");
+
+    // const screenshot = await page.screenshot();
+    // res.end(screenshot, "binary");
   } catch (error: any) {
     if (!res.headersSent) {
       res.status(400).send(error.message);
@@ -548,8 +587,8 @@ app.get("/api/status/browserless", async (req, res) => {
   }
 });
 
-// app.get("/", (req, res) => {
-//   res.sendFile(path.join(__dirname, "dist", "index.html"));
-// });
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
+});
 
 app.listen(3223, () => console.log("Listening on PORT: http://localhost:3223"));
