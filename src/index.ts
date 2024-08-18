@@ -602,88 +602,85 @@ app.get("/metrics", async (req, res) => {
 
     res.set("Content-Type", "text/plain");
     res.send(`
+# HELP router_hutch_uplink_rate Uplink rate from Hutch
+# TYPE router_hutch_uplink_rate gauge
+router_hutch_uplink_rate ${hutchData.uplink_rate}
 
-      	
-            # HELP router_hutch_uplink_rate Uplink rate from Hutch
-            # TYPE router_hutch_uplink_rate gauge
-            router_hutch_uplink_rate ${hutchData.uplink_rate}
+# HELP router_hutch_web_signal Signal strength from Hutch
+# TYPE router_hutch_web_signal gauge
+router_hutch_web_signal ${hutchData.web_signal}
 
-            # HELP router_hutch_web_signal Signal strength from Hutch
-            # TYPE router_hutch_web_signal gauge
-            router_hutch_web_signal ${hutchData.web_signal}
+# HELP router_hutch_downlink_rate Downlink rate from Hutch
+# TYPE router_hutch_downlink_rate gauge
+router_hutch_downlink_rate ${hutchData.downlink_rate}
 
-            # HELP router_hutch_downlink_rate Downlink rate from Hutch
-            # TYPE router_hutch_downlink_rate gauge
-            router_hutch_downlink_rate ${hutchData.downlink_rate}
+# HELP router_hutch_uplink_traffic Uplink traffic from Hutch
+# TYPE router_hutch_uplink_traffic counter
+router_hutch_uplink_traffic ${hutchData.uplink_traffic}
 
-            # HELP router_hutch_uplink_traffic Uplink traffic from Hutch
-            # TYPE router_hutch_uplink_traffic counter
-            router_hutch_uplink_traffic ${hutchData.uplink_traffic}
+# HELP router_hutch_downlink_traffic Downlink traffic from Hutch
+# TYPE router_hutch_downlink_traffic counter
+router_hutch_downlink_traffic ${hutchData.downlink_traffic}
 
-            # HELP router_hutch_downlink_traffic Downlink traffic from Hutch
-            # TYPE router_hutch_downlink_traffic counter
-            router_hutch_downlink_traffic ${hutchData.downlink_traffic}
+# HELP router_hutch_rsrp RSRP from Hutch
+# TYPE router_hutch_rsrp gauge
+router_hutch_rsrp ${hutchData.rsrp}
 
-            # HELP router_hutch_rsrp RSRP from Hutch
-            # TYPE router_hutch_rsrp gauge
-            router_hutch_rsrp ${hutchData.rsrp}
+# HELP router_hutch_rsrq RSRQ from Hutch
+# TYPE router_hutch_rsrq gauge
+router_hutch_rsrq ${hutchData.rsrq}
 
-            # HELP router_hutch_rsrq RSRQ from Hutch
-            # TYPE router_hutch_rsrq gauge
-            router_hutch_rsrq ${hutchData.rsrq}
+# HELP router_hutch_sinr SINR from Hutch
+# TYPE router_hutch_sinr gauge
+router_hutch_sinr ${hutchData.sinr}
 
-            # HELP router_hutch_sinr SINR from Hutch
-            # TYPE router_hutch_sinr gauge
-            router_hutch_sinr ${hutchData.sinr}
+# HELP router_hutch_rssi RSSI from Hutch
+# TYPE router_hutch_rssi gauge
+router_hutch_rssi ${hutchData.rssi}
 
-            # HELP router_hutch_rssi RSSI from Hutch
-            # TYPE router_hutch_rssi gauge
-            router_hutch_rssi ${hutchData.rssi}
+# HELP router_hutch_online_time Online time from Hutch
+# TYPE router_hutch_online_time gauge
+router_hutch_online_time ${hutchData.online_time}
 
-            # HELP router_hutch_online_time Online time from Hutch
-            # TYPE router_hutch_online_time gauge
-            router_hutch_online_time ${hutchData.online_time}
+# HELP router_dialog_uplink_rate Uplink rate from Dialog
+# TYPE router_dialog_uplink_rate gauge
+router_dialog_uplink_rate ${dialogData.uplink_rate}
 
-            # HELP router_dialog_uplink_rate Uplink rate from Dialog
-            # TYPE router_dialog_uplink_rate gauge
-            router_dialog_uplink_rate ${dialogData.uplink_rate}
+# HELP router_dialog_web_signal Signal strength from Hutch
+# TYPE router_dialog_web_signal gauge
+router_dialog_web_signal ${hutchData.web_signal}
 
-            # HELP router_dialog_web_signal Signal strength from Hutch
-            # TYPE router_dialog_web_signal gauge
-            router_dialog_web_signal ${hutchData.web_signal}
+# HELP router_dialog_downlink_rate Downlink rate from Dialog
+# TYPE router_dialog_downlink_rate gauge
+router_dialog_downlink_rate ${dialogData.downlink_rate}
 
-            # HELP router_dialog_downlink_rate Downlink rate from Dialog
-            # TYPE router_dialog_downlink_rate gauge
-            router_dialog_downlink_rate ${dialogData.downlink_rate}
+# HELP router_dialog_uplink_traffic Uplink traffic from Dialog
+# TYPE router_dialog_uplink_traffic counter
+router_dialog_uplink_traffic ${dialogData.uplink_traffic}
 
-            # HELP router_dialog_uplink_traffic Uplink traffic from Dialog
-            # TYPE router_dialog_uplink_traffic counter
-            router_dialog_uplink_traffic ${dialogData.uplink_traffic}
+# HELP router_dialog_downlink_traffic Downlink traffic from Dialog
+# TYPE router_dialog_downlink_traffic counter
+router_dialog_downlink_traffic ${dialogData.downlink_traffic}
 
-            # HELP router_dialog_downlink_traffic Downlink traffic from Dialog
-            # TYPE router_dialog_downlink_traffic counter
-            router_dialog_downlink_traffic ${dialogData.downlink_traffic}
+# HELP router_dialog_rsrp RSRP from Dialog
+# TYPE router_dialog_rsrp gauge
+router_dialog_rsrp ${dialogData.rsrp}
 
-            # HELP router_dialog_rsrp RSRP from Dialog
-            # TYPE router_dialog_rsrp gauge
-            router_dialog_rsrp ${dialogData.rsrp}
+# HELP router_dialog_rsrq RSRQ from Dialog
+# TYPE router_dialog_rsrq gauge
+router_dialog_rsrq ${dialogData.rsrq}
 
-            # HELP router_dialog_rsrq RSRQ from Dialog
-            # TYPE router_dialog_rsrq gauge
-            router_dialog_rsrq ${dialogData.rsrq}
+# HELP router_dialog_sinr SINR from Dialog
+# TYPE router_dialog_sinr gauge
+router_dialog_sinr ${dialogData.sinr}
 
-            # HELP router_dialog_sinr SINR from Dialog
-            # TYPE router_dialog_sinr gauge
-            router_dialog_sinr ${dialogData.sinr}
+# HELP router_dialog_rssi RSSI from Dialog
+# TYPE router_dialog_rssi gauge
+router_dialog_rssi ${dialogData.rssi}
 
-            # HELP router_dialog_rssi RSSI from Dialog
-            # TYPE router_dialog_rssi gauge
-            router_dialog_rssi ${dialogData.rssi}
-
-            # HELP router_dialog_online_time Online time from Dialog
-            # TYPE router_dialog_online_time gauge
-            router_dialog_online_time ${dialogData.online_time}
-        `);
+# HELP router_dialog_online_time Online time from Dialog
+# TYPE router_dialog_online_time gauge
+router_dialog_online_time ${dialogData.online_time}`);
   } catch (error) {
     console.error("Error fetching data from /metrics", error);
     res.status(500).send("Error fetching router data");
