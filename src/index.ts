@@ -602,9 +602,15 @@ app.get("/metrics", async (req, res) => {
 
     res.set("Content-Type", "text/plain");
     res.send(`
+
+      	
             # HELP router_hutch_uplink_rate Uplink rate from Hutch
             # TYPE router_hutch_uplink_rate gauge
             router_hutch_uplink_rate ${hutchData.uplink_rate}
+
+            # HELP router_hutch_web_signal Signal strength from Hutch
+            # TYPE router_hutch_web_signal gauge
+            router_hutch_uplink_rate ${hutchData.web_signal}
 
             # HELP router_hutch_downlink_rate Downlink rate from Hutch
             # TYPE router_hutch_downlink_rate gauge
@@ -641,6 +647,10 @@ app.get("/metrics", async (req, res) => {
             # HELP router_dialog_uplink_rate Uplink rate from Dialog
             # TYPE router_dialog_uplink_rate gauge
             router_dialog_uplink_rate ${dialogData.uplink_rate}
+
+            # HELP router_dialog_web_signal Signal strength from Hutch
+            # TYPE router_dialog_web_signal gauge
+            router_hutch_uplink_rate ${hutchData.web_signal}
 
             # HELP router_dialog_downlink_rate Downlink rate from Dialog
             # TYPE router_dialog_downlink_rate gauge
