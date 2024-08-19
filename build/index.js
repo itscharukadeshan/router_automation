@@ -487,7 +487,7 @@ router_dialog_uplink_rate ${dialogData.uplink_rate}
 
 # HELP router_dialog_web_signal Signal strength from Hutch
 # TYPE router_dialog_web_signal gauge
-router_dialog_web_signal ${hutchData.web_signal}
+router_dialog_web_signal ${dialogData.web_signal}
 
 # HELP router_dialog_downlink_rate Downlink rate from Dialog
 # TYPE router_dialog_downlink_rate gauge
